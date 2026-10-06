@@ -53,10 +53,30 @@ Not deployed.
 
 ## Repository publishing
 
+The entries in this section describe historical attempts. Successful publication to `kiva-demo` is confirmed in the next section; agent-side write/network restrictions were not resolved by that external publication.
+
 * Destination requested: `https://github.com/Sambhav255/kiva-demo`, branch `main`.
 * Prepared a local Git repository at `/private/tmp/kiva-demo-publish`, excluding reference screenshots and generated artifacts.
 * Repository access now confirms owner `Sambhav255` has push/admin rights. The remote contains only its initial README commit; no implementation was published.
 * GitHub connector writes to both Git trees and repository contents fail with HTTP 403, `Resource not accessible by integration`. Its installation repository search does not list this repository. The exact app repository/scope configuration still needs browser inspection.
 * Terminal Git and CLI login are blocked by this managed session's networking restrictions (`Could not resolve host: github.com`). CLI token validity cannot be established while GitHub is unreachable.
-* Native browser inspection is currently blocked by Computer Use `cgWindowNotFound`; no app permission settings were changed.
+* Browser access recovered. Created the private replacement repository `Sambhav255/kiva-impact-plan-concept` at the user's request; the source upload did not complete because the browser file-upload permission request was dismissed. The repository remains empty. No app permission settings were changed.
 * Prepared `/private/tmp/kiva-push.sh` for terminal publishing when networking is available. It checks authentication, preserves the reviewed remote initial commit, excludes screenshots, stops if the remote unexpectedly changes, and pushes without force. Shell syntax check passed.
+
+* Prepared `/private/tmp/kiva-push-concept.sh` for authenticated publishing to the new repository from a normal Terminal. It verifies the signed-in account and refuses to overwrite unrelated remote history.
+
+* Retried publishing: terminal push still fails DNS resolution for `github.com`. Browser confirms the new private repository exists and remains empty. Browser upload now identifies the ChatGPT extension's disabled “Allow access to file URLs” setting as the blocker. Browser security policy rejects opening `brave://extensions`, so that setting must be enabled by the user directly.
+
+## Publication confirmed
+
+* The user published the implementation through Cursor to `https://github.com/Sambhav255/kiva-demo`, branch `main`.
+* Verified the remote main commit `cc5c2081dc2ed880316dd38be27909afc684bd87` and the repository tree through the GitHub connector. Application source, configuration, tests, and product documentation are present; reference screenshots are excluded.
+* `kiva-demo` is the published repository. The separately created private `kiva-impact-plan-concept` repository was not used.
+* This local build-log update has not been pushed.
+
+## ChatGPT handoff document
+
+* Created `CHATGPT_HANDOFF.md` on October 6, 2026 for the conversation that produced the original brief and plan.
+* Reconciled the product documents, current source, test coverage, and verified GitHub publication with parallel product and implementation reviews.
+* Documented completed versus planned milestones, exact current route behavior, dependencies, fixtures, verification limitations, publishing history, research unknowns, and a detailed continuation sequence.
+* The handoff and latest local log changes have not been pushed. No application code changed during this documentation task.
