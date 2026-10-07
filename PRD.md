@@ -1,146 +1,53 @@
-# Product Requirements Document
+# Kiva Impact Plan — current product requirements
 
-## Product name
+Updated October 6, 2026. This reduced scope supersedes the original lender-site recreation and `IMPLEMENTATION_PLAN.md` roadmap.
 
-Kiva Impact Plan
+## Purpose
 
-## Product type
+Build a brief, interactive demonstration of one proposed feature for Kiva product managers: an Impact Plan that connects borrower participation, impact preferences, funding, and repayment behavior. Preserve the existing Next.js/TypeScript foundation and Kiva-inspired visual tokens.
 
-Unofficial concept prototype for the individual lender experience.
+The hypothesis is that making the money lifecycle visible could improve comprehension and confidence while preserving control. The prototype does not establish that Kiva users are confused or that any business outcome will improve.
 
-## Product objective
+Success targets: understandable in under 30 seconds, completable in under one minute, and clear enough for a reviewer to explain the illustrative next $25 and the action after repayment.
 
-Give a lender one place to understand and configure how their money should move through Kiva.
+## Root page
 
-The user should leave setup able to answer:
+Create minimal context, not a recreation of Kiva's homepage or lender account.
 
-* How much control do I have over borrower selection?
-* What types of impact do I want to support?
-* How does money enter my Kiva account?
-* What happens when borrowers repay?
+Show:
 
-## Primary user
+* An “Unofficial concept” indicator.
+* One short sentence explaining the concept.
+* A card titled “Set your Impact Plan.”
+* Copy: “Decide how involved you want to be and what should happen when money comes back.”
+* Primary CTA: “Set my plan,” opening `/impact-plan`.
 
-An individual Kiva lender who is new, lightly engaged, or returning after time away and does not yet have a clear recurring lending routine.
+Do not show marketplace cards, full account navigation, account statistics, or a full footer.
 
-The first prototype should optimize for someone with little or no prior lending history because that is the cleanest place to test comprehension and setup.
+## Three-step wizard on `/impact-plan`
 
-## Secondary user
+### Step 1: How involved do you want to be?
 
-An existing lender who already has repayments, preferences, or recurring behavior but wants one place to understand and change those settings.
-
-## User problem
-
-Kiva has multiple ways to lend and automate impact. These systems are useful but distributed across separate product surfaces.
-
-A lender may need to understand manual lending, Auto Deposit, Auto Lending, Monthly Good, repayment settings, direct donations, and other account controls before they can confidently predict what will happen to their money.
-
-## Job to be done
-
-When I decide to use Kiva more than once, I want to define how involved I want to be and what should happen to my money over time, so I can create recurring impact without repeatedly configuring separate features.
-
-## Hypothesis
-
-A unified Impact Plan will improve user comprehension and confidence by expressing several separate product settings as one coherent money lifecycle.
-
-## Prototype success criteria
-
-The concept succeeds as a demo if a first time viewer can:
-
-* Understand the problem within thirty seconds
-* Complete setup in under two minutes
-* Predict what will happen to the next twenty five dollars
-* Understand what happens after repayment
-* Distinguish lending capital from donations to Kiva
-* Change the plan without searching multiple account pages
-
-## Long term product success metrics
-
-These are hypothetical production metrics and should be labelled as such in the case study.
-
-Primary metrics:
-
-* Impact Plan completion rate
-* First loan completion rate after plan creation
-* Adoption of recurring participation
-* Adoption of automatic relending where appropriate
-* Reduction in idle account balance over time
-* Thirty day and ninety day repeat lending rate
-
-Comprehension metrics:
-
-* Percentage of users who can correctly explain what happens to repayments
-* Percentage of users who understand the difference between lending capital and direct donations
-* Confidence score after configuring recurring behavior
-
-Guardrail metrics:
-
-* Increase in settings reversals shortly after plan creation
-* Increase in support contacts related to money routing
-* Increase in unintended automation complaints
-* Drop in perceived lender control
-
-## MVP scope
-
-### Entry point
-
-Add an Impact Plan card to a Kiva inspired My Impact home state.
-
-The card should replace or sit near goal setting and clearly explain the value:
-
-Set your Impact Plan
-
-Decide what you care about and what Kiva should do when money comes back.
-
-### Setup flow
-
-The setup contains four conceptual steps.
-
-#### Step 1: Participation style
-
-Question:
-
-How involved do you want to be?
-
-Options:
+Require one intentional participation choice:
 
 * Choose every borrower
 * Show me a short list
 * Lend for me based on my preferences
 
-The purpose is to establish the user's preferred level of control.
+### Step 2: What matters to you?
 
-#### Step 2: Impact preferences
+Allow multiple selections from exactly this concise cause set:
 
-Question:
-
-What matters to you?
-
-Allow multiple cause selections using categories that already resemble the Giving Fund experience.
-
-Suggested cause set:
-
-* Climate threatened people
-* Agriculture
-* Conflict zones
-* Refugees and IDPs
-* Water and sanitation
-* Entrepreneurs
+* Women
 * Education
-* Arts
-* Food
-* Single parents
-* Kiva U.S.
+* Climate
+* Entrepreneurs
+* Refugees
+* Agriculture
 
-Also allow optional location and borrower gender preferences.
+Require at least one cause. Offer optional location and borrower gender preferences as secondary controls. Do not create advanced marketplace filters or calculate matching borrowers.
 
-Do not reproduce the full advanced marketplace filtering system in the MVP.
-
-#### Step 3: Money behavior
-
-Question:
-
-How should money move?
+### Step 3: How should your money move?
 
 Funding options:
 
@@ -148,136 +55,51 @@ Funding options:
 * Add a set amount monthly
 * Only reuse repayments
 
+Monthly funding reveals a simple positive amount input. It represents a preference, not a payment form, subscription, or real enrollment.
+
 Repayment options:
 
-* Return repayments to my available balance
-* Show me new matches when money comes back
+* Return to my available balance
+* Show me new matches
 * Relend automatically based on this plan
 
-The interface should dynamically explain what each choice means.
+Prevent or explain contradictory combinations. Manual participation cannot be combined with automatic relending, because that would contradict choosing every borrower. If an edited participation choice makes automatic relending invalid, return repayments to balance and visibly announce the change. The user can choose another compatible repayment behavior in step 3.
 
-If the selected participation style conflicts with a repayment option, guide the user toward a compatible configuration rather than allowing contradictory settings.
+Guided participation can use all repayment modes; automatic relending means returned funds would use the preferences without another borrower choice. Automatic participation with balance or new matches must clearly explain that initial selection is automatic while repayments either wait in the balance or require a new decision.
 
-Example:
+Back and Continue preserve selections while moving through the wizard. All controls must support keyboard interaction and associated validation messages.
 
-If the user chooses Choose every borrower, automatic relending should either be disabled or clearly explained as a separate choice that changes the level of control.
+## Result on the same route
 
-#### Step 4: Review and money flow
+After completion, show the plan and its money lifecycle:
 
-Show a visual plan summary.
+**$25 enters Kiva → borrower selection → loan funded → borrower repayment → configured next action**
 
-The user should see an example lifecycle for the next twenty five dollars:
+Change wording dynamically with funding, participation, preferences, and repayment selections. The selection stage must distinguish choosing every borrower, choosing from a short list, and preference-based automatic selection. The final stage must distinguish balance, new matches, and automatic relending.
 
-Money added
+For repayments-only funding, explain that the illustrative $25 comes from existing repayments rather than a new deposit. Monthly funding should show the configured recurring amount without suggesting that a charge was activated. Repayment and subsequent reuse are conditional: repayment is not guaranteed.
 
-Then borrower selection behavior
-
-Then loan funding
-
-Then repayment
-
-Then the configured next action
-
-Include a clear note that repayment is not guaranteed and that this is an unofficial prototype that does not move real money.
-
-### Completed state
-
-After saving the plan, return the user to a My Impact page.
-
-Add a prominent Your Impact Plan card showing:
+Below the lifecycle, show a compact “Your Impact Plan” card containing:
 
 * Participation style
-* Top causes
+* Selected causes and any optional preferences
 * Funding behavior
 * Repayment behavior
-* Edit Plan action
 
-If the user chose guided selection, show a small Recommended for your plan section using static borrower fixtures.
+Provide “Edit plan” and “Reset demo.” Editing loads the existing values; completion saves the revised result. Reset returns the experience to its initial state and removes only the demo's own storage entry.
 
-If the user chose full automation, show a plan status summary instead of individual borrower cards.
+Persist a valid completed plan locally so refresh restores the result. Handle malformed or unavailable local storage safely. Draft persistence, accounts, backend state, and cross-device sync are not required.
 
-## About page
+## Routes and exclusions
 
-Create a concise About this concept page for product reviewers.
+The only product surfaces are `/` and `/impact-plan`. Existing `/impact-plan/review`, `/my-impact`, and `/about` URLs may redirect to the relevant current page rather than exposing additional surfaces.
 
-It should explain:
+Do not build Kiva marketplace, checkout, borrower detail pages, account settings, teams, messages, donations, Giving Funds, a full My Impact dashboard, recommendation algorithms, real Kiva API integration, authentication, payment flows, a database, a large About page, full Kiva navigation, or a full Kiva footer. Do not add AI chat, analytics, or unrelated polish.
 
-* The observed product problem
-* The hypothesis
-* What was intentionally left out
-* What would need to be validated with real Kiva users and data
-* That the prototype is unofficial and unaffiliated
+## Visual, safety, and acceptance requirements
 
-Include a reset demo state button.
+Keep the current calm visual foundation: pale green/white backgrounds, forest green, serif headings, sans serif body copy, rounded cards, soft borders, and green buttons. Screenshots remain visual references only and must not be shipped.
 
-## Required interactions
+Keep the unofficial indicator visible. State that the concept is independent, not produced or endorsed by Kiva, and does not move real money. Avoid guaranteed repayment, impact, returns, or tax claims. The money lifecycle is an example, not a transaction receipt.
 
-* User can move forward and backward through setup without losing selections.
-* User can exit setup and return later in the same browser.
-* User can edit a completed plan.
-* User can reset the demo.
-* User selections persist across refresh using local storage.
-* All form controls can be used with keyboard navigation.
-
-## Out of scope
-
-Do not build:
-
-* Real sign in
-* Real Kiva account sync
-* Checkout
-* Payment processing
-* Bank or card details
-* Real Auto Deposit enrollment
-* Real Auto Lending enrollment
-* Real Monthly Good enrollment
-* Giving Fund creation
-* Real loan transactions
-* Donation transactions
-* Messaging
-* Teams
-* Borrower comments
-* Administrative tools
-* Production analytics
-* A database
-
-## Product principles
-
-### Make money movement legible
-
-At every step, describe what will happen rather than naming a setting without context.
-
-### Preserve user control
-
-Automation should feel reversible and explicit.
-
-### Reuse Kiva concepts
-
-This is a unification concept, not an attempt to rename every existing product.
-
-### Use progressive disclosure
-
-Do not expose every Kiva filter or account setting during setup.
-
-### Be transparent about uncertainty
-
-Never imply guaranteed repayment or guaranteed impact.
-
-### Avoid donation pressure
-
-Do not use the prototype to optimize donations to Kiva. The concept should clarify the difference between lending capital and donations, not create a new upsell.
-
-## Open questions for real product discovery
-
-These questions should appear in the case study because they demonstrate what cannot be learned from public product inspection alone.
-
-* Which lender segments currently use Auto Lending, Auto Deposit, and Monthly Good together?
-* How often do users change automation settings soon after enabling them?
-* What percentage of available lender balance remains idle?
-* Do users understand what happens when repayments arrive?
-* What is the first loan to second loan conversion rate?
-* How much confusion exists between direct donations and lending capital?
-* How does Kiva internally distinguish Monthly Good from Auto Deposit plus Auto Lending?
-* Which settings generate the most support volume?
-* Which parts of the current lender dashboard drive repeat lending?
-* How should Giving Funds appear in an integrated individual impact model?
+Run `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run build`. Test compatibility, dynamic lifecycle wording, wizard completion, editing, persistence, and reset as appropriate. Verify desktop/mobile and keyboard flow when possible. Record actual results and limitations in `BUILD_LOG.md`; do not report unrun checks as passed.

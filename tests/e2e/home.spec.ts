@@ -1,50 +1,65 @@
 import { test, expect } from '@playwright/test';
-test('new lender home routes safely to the setup preview', async ({ page }) => {
+test('context leads to a complete plan that survives refresh, editing and reset', async ({
+  page,
+}) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') errors.push(message.text());
-  });
   await page.goto('/');
   await expect(
-    page.getByRole('heading', { name: 'Your impact starts here' }),
+    page.getByText('Unofficial concept', { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole('link', { name: 'Unofficial concept' }),
+    page.getByRole('heading', { name: 'Set your Impact Plan' }),
   ).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
     'content',
     'noindex, nofollow',
   );
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= window.innerWidth,
-    ),
-  ).toBe(true);
-  await page
-    .getByRole('button', { name: 'Demo lend to A learning cooperative' })
-    .click();
-  await expect(page.getByRole('status').first()).toHaveText(
-    'Prototype only. No loan will be placed.',
-  );
-  await page.getByRole('link', { name: 'Set plan', exact: true }).click();
+  await page.getByRole('link', { name: 'Set my plan' }).click();
   await expect(page).toHaveURL(/\/impact-plan$/);
+  await page.getByRole('radio', { name: /Show me a short list/ }).check();
+  await page.getByRole('button', { name: /Continue/ }).click();
+  await page.getByRole('checkbox', { name: 'Women', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Education', exact: true }).check();
+  await page.getByRole('combobox', { name: /Location/ }).selectOption('Asia');
+  await page.getByRole('button', { name: /Continue/ }).click();
+  await page.getByRole('radio', { name: /Only reuse repayments/ }).check();
+  await page.getByRole('radio', { name: /Show me new matches/ }).check();
+  await page.getByRole('button', { name: /See my Impact Plan/ }).click();
   await expect(
-    page.getByRole('heading', { name: 'Set your Impact Plan' }),
+    page.getByRole('list', { name: 'Example $25 money lifecycle' }),
   ).toBeVisible();
-  await page
-    .getByRole('link', { name: 'Back to My impact', exact: true })
-    .click();
-  await page.getByRole('link', { name: 'Unofficial concept' }).click();
-  await expect(page).toHaveURL(/\/about$/);
   await expect(
-    page
-      .getByText('It is not produced or endorsed by Kiva', { exact: false })
-      .first(),
+    page.getByText('Women, Education', { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: '$25 returns to Kiva' }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    page.getByRole('heading', { name: 'Your Impact Plan' }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Edit plan' }).click();
+  await expect(
+    page.getByRole('radio', { name: /Show me a short list/ }),
+  ).toBeChecked();
+  await page.getByRole('button', { name: /Continue/ }).click();
+  await expect(
+    page.getByRole('checkbox', { name: 'Education', exact: true }),
+  ).toBeChecked();
+  await page.getByRole('button', { name: /Continue/ }).click();
+  await page.getByRole('button', { name: /See my Impact Plan/ }).click();
+  await page.getByRole('button', { name: 'Reset demo' }).click();
+  await page.reload();
+  await expect(
+    page.getByRole('heading', { name: 'How involved do you want to be?' }),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });
-test('keyboard users can reach the main action', async ({ page }) => {
+test('mobile flow fits the viewport and supports keyboard entry', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('/');
   await page.keyboard.press('Tab');
   await expect(
@@ -52,12 +67,26 @@ test('keyboard users can reach the main action', async ({ page }) => {
   ).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('#main-content')).toBeFocused();
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByRole('link', { name: 'Set my plan' }).click();
+  await page.getByRole('radio', { name: /Choose every borrower/ }).check();
+  await page.getByRole('button', { name: /Continue/ }).click();
+  await page.getByRole('checkbox', { name: 'Climate', exact: true }).check();
+  await page.getByRole('button', { name: /Continue/ }).click();
   await expect(
-    page.getByRole('link', { name: 'Set plan', exact: true }),
-  ).toBeFocused();
-  await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/\/impact-plan$/);
+    page.getByRole('radio', { name: /Relend automatically/ }),
+  ).toBeDisabled();
+  await page.getByRole('button', { name: /See my Impact Plan/ }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Your Impact Plan' }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
 });

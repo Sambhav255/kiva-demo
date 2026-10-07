@@ -1,9 +1,4 @@
-import { MilestonePlaceholder } from '@/components/common/MilestonePlaceholder';
+import { redirect } from 'next/navigation';
 export default function ReviewPage() {
-  return (
-    <MilestonePlaceholder title="Your Impact Plan">
-      The review will explain how money enters, supports borrowers, returns, and
-      is reused based on your choices.
-    </MilestonePlaceholder>
-  );
+  redirect('/impact-plan');
 }

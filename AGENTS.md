@@ -1,110 +1,40 @@
 # Instructions for Codex
 
-You are building an unofficial product concept called Kiva Impact Plan.
+You are building Kiva Impact Plan, an unofficial interactive feature concept for Kiva product managers.
 
-Read all project markdown files before making architectural decisions. The product brief and UI specification are the source of truth.
+## Current scope and document precedence
 
-## Product intent
+The October 6, 2026 scope change supersedes the original lender-site recreation and milestone roadmap. Do not continue `IMPLEMENTATION_PLAN.md` as written. Read all project markdown before architectural decisions, but follow the latest user request and the current `PRD.md` for product scope. Earlier route, navigation, dashboard, borrower-fixture, and four-step requirements in other documents are historical context, not requirements for this demo.
 
-This is not a generic portfolio project. The prototype should look and behave like a credible feature that could fit inside the current Kiva lender experience.
+The product hypothesis is that one understandable plan could help lenders connect participation, preferences, funding, and repayment decisions. This is a hypothesis for discussion, not a validated claim about Kiva users.
 
-The point of the prototype is to show product judgment:
+## Required experience
 
-* The current product already has many mechanisms for lending, automating, depositing, donating, and recycling money.
-* The concept does not replace those systems.
-* The concept gives the user one understandable place to decide how those systems should work for them.
+* `/`: minimal Kiva-inspired context, an Unofficial concept indicator, one sentence explaining the concept, and a card titled “Set your Impact Plan.” Use “Decide how involved you want to be and what should happen when money comes back.” and a “Set my plan” link.
+* `/impact-plan`: a compact three-step wizard for participation, preferences, and money behavior, followed by its result on the same route.
+* The result must show a dynamic visual lifecycle for an illustrative $25, a compact Your Impact Plan summary, Edit plan, and Reset demo.
+* Persist only the completed anonymous plan in browser local storage. Refresh restores the result; reset removes only this demo's own state.
+* Prevent manual borrower selection plus automatic relending. Explain automatic selection with balance or new-match repayment behavior so control over returned money stays clear.
+* Legacy `/impact-plan/review`, `/my-impact`, and `/about` routes may redirect to the current experience. They are not separate product surfaces.
+
+A PM should understand the concept in under 30 seconds and complete it in under one minute.
 
 ## Hard scope rules
 
-* Do not build real authentication.
-* Do not connect to a real Kiva account.
-* Do not move money.
-* Do not create payment forms.
-* Do not submit data to Kiva.
-* Do not claim that the prototype is affiliated with Kiva.
-* Do not depend on an undocumented or unstable Kiva API.
-* Do not scrape Kiva pages in the deployed app.
-* Do not ship the reference screenshots to the public app.
-* Do not spend time reproducing every current Kiva page.
-* Do not add AI chat, conversational interfaces, or unrelated features.
+Do not build a marketplace, borrower detail pages, checkout, full My Impact dashboard, account settings, teams, messages, donations, Giving Funds, a large About page, full Kiva navigation, or a full footer. Do not build recommendation algorithms, a real Kiva API integration, authentication, payment flows, a database, AI chat, or unrelated features.
 
-## Visual rules
+Do not connect to a real Kiva account, move money, submit data to Kiva, scrape Kiva pages, depend on undocumented APIs, or imply Kiva affiliation. Do not request credentials or personal information. Do not imply guaranteed repayment, guaranteed impact, financial return, or tax outcomes.
 
-Use the screenshots in `screenshots` as visual references.
+## Visual and engineering rules
 
-Match these characteristics:
+Preserve the existing Next.js App Router, strict TypeScript, Tailwind foundation, and useful visual tokens. Use white and pale green backgrounds, forest green, serif display headings, sans serif body copy, rounded white cards, green primary buttons, soft borders, restrained shadows, and generous whitespace.
 
-* White and very pale green page backgrounds
-* Dark forest green navigation
-* Strong serif display headings
-* Clean sans serif body copy
-* Rounded white content cards
-* Green primary buttons
-* Soft borders and restrained shadows
-* Generous whitespace
-* Calm nonprofit financial product tone
+Use screenshots only as visual references; never ship them as app content. Keep components small, accessible, and reusable. Use native radio/checkbox semantics, labelled fields, visible focus, understandable selected states, and usable touch targets. Keep state local to the browser and handle invalid or unavailable storage gracefully. Do not add global state libraries or backend services for this flow.
 
-Do not make a pixel perfect clone. The prototype should feel native to Kiva while remaining clearly an unofficial concept.
+The latest request's exact copy and six-cause subset supersede conflicting text in `CONTENT_COPY.md` and `UI_SPEC.md`.
 
-## Engineering rules
+## Build discipline and completion
 
-* Use current stable Next.js with the App Router.
-* Use TypeScript with strict mode.
-* Use Tailwind CSS.
-* Keep state local to the browser.
-* Persist the completed plan in local storage so refreshing the prototype does not reset it.
-* Keep the data provider abstract so static loan fixtures can later be replaced by a supported public data source.
-* Use accessible HTML and keyboard interactions.
-* Keep components small and reusable.
-* Do not introduce a database.
-* Do not introduce global state libraries unless the flow becomes impossible to manage cleanly without one.
+Run `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run build` after implementation. Manually verify the main flow at desktop and mobile widths when the environment permits; report blocked checks honestly.
 
-## Build discipline
-
-After meaningful changes run:
-
-* type checking
-* linting
-* unit tests
-* production build
-
-Before finishing a milestone, verify the main flow manually at desktop and mobile widths.
-
-## Required routes
-
-* `/`
-* `/impact-plan`
-* `/impact-plan/review`
-* `/my-impact`
-* `/about`
-
-## Required persistent state
-
-The app should support two demo states:
-
-* New lender without an Impact Plan
-* Lender with a completed Impact Plan
-
-Add a small developer reset control on the About page so the prototype can be returned to its initial state without clearing browser storage manually.
-
-## Data rules
-
-Use local fixture data for borrower recommendation cards.
-
-The fixtures may be inspired by the public screenshot examples, but do not rely on remote Kiva assets. Use neutral local placeholder artwork or CSS image treatments unless a clearly licensed public asset is deliberately added.
-
-## Copy rules
-
-Use the copy in `CONTENT_COPY.md` unless implementation constraints require minor wording changes.
-
-Never imply guaranteed repayment, guaranteed impact, financial return, or tax outcomes.
-
-## Completion behavior
-
-When the main build is complete, update `BUILD_LOG.md` with:
-
-* What was built
-* Any intentional deviations from the PRD
-* Known issues
-* Test status
-* Deployment URL if available
+Update `BUILD_LOG.md` with what was built, intentional scope changes, known issues, actual check results, and a deployment URL only if one exists. Do not expand the demo beyond the reduced scope for additional polish.

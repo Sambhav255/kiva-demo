@@ -1,5 +1,7 @@
 # Implementation Plan
 
+> **Superseded — historical roadmap only (October 6, 2026).** Do not continue these milestones. The product is now a minimal root context page and a three-step Impact Plan demo with its result on `/impact-plan`. Follow the latest user request, `AGENTS.md`, and `PRD.md`. Wider lender-site navigation, dashboards, borrower cards, recommendation logic, a dedicated review surface, and a large About page below are no longer in scope.
+
 Build in small milestones. The site should be deployable after every milestone from Milestone 2 onward.
 
 ## Milestone 0: Project setup

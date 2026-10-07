@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { inter, lora } from '@/lib/fonts';
-import { GlobalNav } from '@/components/shell/GlobalNav';
-import { AccountNav } from '@/components/shell/AccountNav';
 import { PrototypeBadge } from '@/components/shell/PrototypeBadge';
-import { Footer } from '@/components/shell/Footer';
+import Link from 'next/link';
 import './globals.css';
 export const metadata: Metadata = {
   title: 'Kiva Impact Plan Concept',
@@ -20,19 +18,30 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <GlobalNav />
-        <AccountNav />
+        <header className="demo-header">
+          <div className="container demo-header-inner">
+            <Link
+              href="/"
+              className="demo-brand"
+              aria-label="Kiva Impact Plan concept home"
+            >
+              <span className="wordmark">kiva</span>
+              <span>Impact Plan</span>
+            </Link>
+            <PrototypeBadge />
+          </div>
+        </header>
         <main
           id="main-content"
           className="container main-content"
           tabIndex={-1}
         >
-          <div className="badge-row">
-            <PrototypeBadge />
-          </div>
           {children}
         </main>
-        <Footer />
+        <p className="demo-disclaimer container">
+          Independent concept. Not produced or endorsed by Kiva. No real money
+          moves.
+        </p>
       </body>
     </html>
   );
